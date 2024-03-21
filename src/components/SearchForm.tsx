@@ -15,7 +15,6 @@ export default function SearchForm({
 
       <input
         onChange={(e) => {
-          console.log(e.target.value);
           setSearchText(e.target.value);
           // fetch(
           //   `https://bytegrad.com/course-assets/projects/rmtdev/api/data?q=${e.target.value}`
