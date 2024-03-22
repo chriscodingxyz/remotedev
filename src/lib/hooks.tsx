@@ -78,7 +78,7 @@ export function useDebounce(value: string, delay: number) {
       setDebouncedSearchText(value);
     }, delay);
     return () => clearTimeout(timerId);
-  }, [value]);
+  }, [value, delay]);
 
   return debouncedSearchText;
 }
