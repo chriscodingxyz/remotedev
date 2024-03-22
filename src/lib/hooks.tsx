@@ -70,13 +70,13 @@ export function useJobItem(id: number | null) {
   return { jobItem, isLoading };
 }
 
-export function useDebounce(value: string) {
+export function useDebounce(value: string, delay: number) {
   const [debouncedSearchText, setDebouncedSearchText] = useState(value);
 
   useEffect(() => {
     const timerId = setTimeout(() => {
       setDebouncedSearchText(value);
-    }, 1000);
+    }, delay);
     return () => clearTimeout(timerId);
   }, [value]);
 
