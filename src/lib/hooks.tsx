@@ -2,6 +2,8 @@ import { useEffect, useState } from "react";
 import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
+import { toast } from "sonner";
+import { handleError } from "./utils";
 
 const fetchJobItems = async (searchText: string): Promise<JobItem[]> => {
   const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
@@ -33,9 +35,7 @@ export function useJobItems(searchText: string) {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: Boolean(searchText),
-      onError: (error) => {
-        console.error(error);
-      },
+      onError: handleError,
     }
   );
 
@@ -54,9 +54,7 @@ export function useJobItem(id: number | null) {
       refetchOnWindowFocus: false,
       retry: false,
       enabled: Boolean(id),
-      onError: (error) => {
-        console.error(error);
-      },
+      onError: handleError,
     }
   );
 

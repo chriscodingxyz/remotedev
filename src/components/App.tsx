@@ -13,6 +13,7 @@ import PaginationControls from "./PaginationControls";
 import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
 import { useDebounce, useJobItems } from "../lib/hooks";
+import { Toaster } from "sonner";
 
 function App() {
   const [searchText, setSearchText] = useState("");
@@ -24,6 +25,7 @@ function App() {
 
   return (
     <>
+      <Toaster />
       <Background />
       <Header>
         <HeaderTop>
