@@ -3,6 +3,16 @@ import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
 
+const fetchJobItems = async (searchText: string): Promise<JobItem[]> => {
+  const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
+  if (!response.ok) {
+    const errorData = await response.json();
+    throw new Error(errorData.description || "Something went wrong");
+  }
+  const data = await response.json();
+  return data.jobItems;
+};
+
 const fetchJobItem = async (id: number): Promise<JobItemExpanded> => {
   const response = await fetch(`${BASE_API_URL}/${id}`);
   //4xx or 5xx error, browser may still show 200
@@ -15,29 +25,23 @@ const fetchJobItem = async (id: number): Promise<JobItemExpanded> => {
 };
 
 export function useJobItems(searchText: string) {
-  const [jobItems, setJobItems] = useState<JobItem[]>([]);
-  const [isLoading, setIsLoading] = useState(false);
-
-  const totalNumberOfResults = jobItems.length;
-
-  const jobItemsSliced = jobItems.slice(0, 7);
-
-  useEffect(() => {
-    if (!searchText) return;
-    async function fetchData() {
-      setIsLoading(true);
-      const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
-      const data = await response.json();
-      setIsLoading(false);
-      setJobItems(data.jobItems);
+  const { data, isInitialLoading } = useQuery(
+    ["job-items", searchText],
+    () => fetchJobItems(searchText),
+    {
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+      retry: false,
+      enabled: Boolean(searchText),
+      onError: (error) => {
+        console.error(error);
+      },
     }
-    fetchData();
-  }, [searchText]);
+  );
 
   return {
-    jobItemsSliced,
-    isLoading,
-    totalNumberOfResults,
+    jobItems: data,
+    isLoading: isInitialLoading,
   };
 }
 
@@ -113,4 +117,31 @@ export function useActiveId() {
 //   }, [id]);
 
 //   return { jobItem, isLoading };
+// }
+
+// export function useJobItems(searchText: string) {
+//   const [jobItems, setJobItems] = useState<JobItem[]>([]);
+//   const [isLoading, setIsLoading] = useState(false);
+
+//   const totalNumberOfResults = jobItems.length;
+
+//   const jobItemsSliced = jobItems.slice(0, 7);
+
+//   useEffect(() => {
+//     if (!searchText) return;
+//     async function fetchData() {
+//       setIsLoading(true);
+//       const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
+//       const data = await response.json();
+//       setIsLoading(false);
+//       setJobItems(data.jobItems);
+//     }
+//     fetchData();
+//   }, [searchText]);
+
+//   return {
+//     jobItemsSliced,
+//     isLoading,
+//     totalNumberOfResults,
+//   };
 // }
