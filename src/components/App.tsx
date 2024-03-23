@@ -22,7 +22,7 @@ function App() {
   const [currentPage, setCurrentPage] = useState(1);
 
   const totalNumberOfResults = jobItems?.length || 0;
-  const jobItemsSliced = jobItems?.slice(0, currentPage * 7) || [];
+  const jobItemsSliced = jobItems?.slice(0, 7) || [];
 
   function handleChangePage(direction: "next" | "previous") {
     if (direction === "next") {
@@ -44,17 +44,19 @@ function App() {
         <SearchForm searchText={searchText} setSearchText={setSearchText} />
       </Header>
       <Container>
-        <Sidebar>
-          <SidebarTop>
-            <ResultsCount totalNumberOfResults={totalNumberOfResults} />
-            <SortingControls />
-          </SidebarTop>
-          <JobList jobItems={jobItemsSliced} isLoading={isLoading} />
-          <PaginationControls
-            currentPage={currentPage}
-            onClick={handleChangePage}
-          />
-        </Sidebar>
+        {searchText ? (
+          <Sidebar>
+            <SidebarTop>
+              <ResultsCount totalNumberOfResults={totalNumberOfResults} />
+              <SortingControls />
+            </SidebarTop>
+            <JobList jobItems={jobItemsSliced} isLoading={isLoading} />
+            <PaginationControls
+              currentPage={currentPage}
+              onClick={handleChangePage}
+            />
+          </Sidebar>
+        ) : null}
         <JobItemContent />
       </Container>
       <Footer />
