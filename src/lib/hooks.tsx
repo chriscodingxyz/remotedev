@@ -2,7 +2,6 @@ import { useEffect, useState } from "react";
 import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
 import { useQuery } from "@tanstack/react-query";
-import { toast } from "sonner";
 import { handleError } from "./utils";
 
 const fetchJobItems = async (searchText: string): Promise<JobItem[]> => {
