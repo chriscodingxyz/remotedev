@@ -14,18 +14,37 @@ import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import { Toaster } from "sonner";
+import { RESULTS_PER_PAGE } from "../lib/constants";
+import { SortBy } from "../lib/types";
 
 function App() {
   const [searchText, setSearchText] = useState("");
   const debouncedSearchText = useDebounce(searchText, 300);
   const { jobItems, isLoading } = useJobItems(debouncedSearchText);
   const [currentPage, setCurrentPage] = useState(1);
+  const [sortBy, setSortBy] = useState<SortBy>("relevant");
+
+  function handleChangeSortBy(newSortBy: SortBy) {
+    setCurrentPage(1);
+    setSortBy(newSortBy);
+  }
 
   const totalNumberOfResults = jobItems?.length || 0;
-  const jobItemsSliced =
-    jobItems?.slice(7 * currentPage - 7, currentPage * 7) || [];
 
-  const pagesTotal = Math.ceil(totalNumberOfResults / 7);
+  const jobItemsSorted =
+    jobItems?.sort((a, b) => {
+      if (sortBy === "relevant") {
+        return b.relevanceScore - a.relevanceScore;
+      } else sortBy === "recent";
+      return a.daysAgo - b.daysAgo;
+    }) || [];
+
+  const jobItemsSortedAndSliced = jobItemsSorted.slice(
+    RESULTS_PER_PAGE * currentPage - RESULTS_PER_PAGE,
+    currentPage * RESULTS_PER_PAGE
+  );
+
+  const pagesTotal = Math.ceil(totalNumberOfResults / RESULTS_PER_PAGE);
 
   function handleChangePage(direction: "next" | "previous") {
     if (direction === "next") {
@@ -51,9 +70,9 @@ function App() {
           <Sidebar>
             <SidebarTop>
               <ResultsCount totalNumberOfResults={totalNumberOfResults} />
-              <SortingControls />
+              <SortingControls sortBy={sortBy} onClick={handleChangeSortBy} />
             </SidebarTop>
-            <JobList jobItems={jobItemsSliced} isLoading={isLoading} />
+            <JobList jobItems={jobItemsSortedAndSliced} isLoading={isLoading} />
             <PaginationControls
               currentPage={currentPage}
               onClick={handleChangePage}
