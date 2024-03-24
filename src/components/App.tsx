@@ -15,7 +15,7 @@ import SortingControls from "./SortingControls";
 import { useDebounce, useJobItems } from "../lib/hooks";
 import { Toaster } from "sonner";
 import { RESULTS_PER_PAGE } from "../lib/constants";
-import { SortBy } from "../lib/types";
+import { PageDirection, SortBy } from "../lib/types";
 
 function App() {
   const [searchText, setSearchText] = useState("");
@@ -46,7 +46,7 @@ function App() {
 
   const pagesTotal = Math.ceil(totalNumberOfResults / RESULTS_PER_PAGE);
 
-  function handleChangePage(direction: "next" | "previous") {
+  function handleChangePage(direction: PageDirection) {
     if (direction === "next") {
       setCurrentPage((prev) => prev + 1);
     } else {
