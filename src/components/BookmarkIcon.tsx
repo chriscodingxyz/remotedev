@@ -7,7 +7,14 @@ export default function BookmarkIcon({ id }: { id: number }) {
   const idIncluded = bookmarkedIds.includes(id);
 
   return (
-    <button onClick={() => handleToggleBookmark(id)} className="bookmark-btn">
+    <button
+      onClick={(e) => {
+        handleToggleBookmark(id);
+        e.stopPropagation();
+        e.preventDefault();
+      }}
+      className="bookmark-btn"
+    >
       <BookmarkFilledIcon className={idIncluded ? "filled" : ""} />
     </button>
   );
