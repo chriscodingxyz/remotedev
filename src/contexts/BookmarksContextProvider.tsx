@@ -7,11 +7,9 @@ export default function BookmarksContextProvider({
 }: {
   children: React.ReactNode;
 }) {
-  const bookmarkedIdsFromLocalStorage = JSON.parse(
-    localStorage.getItem("bookmarkedIds") || "[]"
-  );
-  const [bookmarkedIds, setBookmarkIds] = useState<number[]>(
-    bookmarkedIdsFromLocalStorage
+  //now the function to get the bookmarked ids from local storage will run once, optimizing performance
+  const [bookmarkedIds, setBookmarkIds] = useState<number[]>(() =>
+    JSON.parse(localStorage.getItem("bookmarkedIds") || "[]")
   );
   function handleToggleBookmark(id: number) {
     if (bookmarkedIds.includes(id)) {
