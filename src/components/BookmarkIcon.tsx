@@ -3,7 +3,11 @@ import { useContext } from "react";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
 
 export default function BookmarkIcon({ id }: { id: number }) {
-  const { bookmarkedIds, handleToggleBookmark } = useContext(BookmarksContext);
+  const context = useContext(BookmarksContext);
+  if (!context) {
+    throw new Error("BookmarksContext not found");
+  }
+  const { bookmarkedIds, handleToggleBookmark } = context;
   const idIncluded = bookmarkedIds.includes(id);
 
   return (
