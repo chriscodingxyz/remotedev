@@ -14,7 +14,10 @@ export default function BookmarksContextProvider({
   children: React.ReactNode;
 }) {
   //now the function to get the bookmarked ids from local storage will run once, optimizing performance
-  const [bookmarkedIds, setBookmarkIds] = useLocalStorage("bookmarkedIds", []);
+  const [bookmarkedIds, setBookmarkIds] = useLocalStorage<number[]>(
+    "bookmarkedIds",
+    []
+  );
   function handleToggleBookmark(id: number) {
     if (bookmarkedIds.includes(id)) {
       setBookmarkIds((prev) => prev.filter((item) => item !== id));
