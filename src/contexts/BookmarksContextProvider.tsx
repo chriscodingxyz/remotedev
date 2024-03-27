@@ -23,13 +23,17 @@ export default function BookmarksContextProvider({
     }
   }
 
-  // useEffect(() => {
-  //   localStorage.setItem("bookmarkedIds", JSON.stringify(bookmarkedIds));
-  // }, [bookmarkedIds]);
-
   return (
     <BookmarksContext.Provider value={{ bookmarkedIds, handleToggleBookmark }}>
       {children}
     </BookmarksContext.Provider>
   );
+}
+
+export function useBookMarksContext() {
+  const context = useContext(BookmarksContext);
+  if (!context) {
+    throw new Error("BookmarksContext not found");
+  }
+  return context;
 }
