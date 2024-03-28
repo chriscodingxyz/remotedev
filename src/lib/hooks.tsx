@@ -1,10 +1,11 @@
 import { useContext, useEffect, useState } from "react";
 import { JobItem, JobItemExpanded } from "./types";
 import { BASE_API_URL } from "./constants";
-import { useQuery } from "@tanstack/react-query";
+import { useQueries, useQuery } from "@tanstack/react-query";
 import { handleError } from "./utils";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
 
+// -- API Calls --
 const fetchJobItems = async (searchText: string): Promise<JobItem[]> => {
   const response = await fetch(`${BASE_API_URL}?search=${searchText}`);
   if (!response.ok) {
@@ -14,7 +15,6 @@ const fetchJobItems = async (searchText: string): Promise<JobItem[]> => {
   const data = await response.json();
   return data.jobItems;
 };
-
 const fetchJobItem = async (id: number): Promise<JobItemExpanded> => {
   const response = await fetch(`${BASE_API_URL}/${id}`);
   //4xx or 5xx error, browser may still show 200
@@ -25,8 +25,10 @@ const fetchJobItem = async (id: number): Promise<JobItemExpanded> => {
   const data = await response.json();
   return data.jobItem;
 };
+// -- API Calls --
 
-export function useJobItems(searchText: string) {
+// ----------------------- search via text string in input
+export function useSearchQuery(searchText: string) {
   const { data, isInitialLoading } = useQuery(
     ["job-items", searchText],
     () => fetchJobItems(searchText),
@@ -45,6 +47,7 @@ export function useJobItems(searchText: string) {
   };
 }
 
+// ----------------------- single job item by ID
 export function useJobItem(id: number | null) {
   const { data, isInitialLoading } = useQuery(
     ["job-item", id],
@@ -61,6 +64,31 @@ export function useJobItem(id: number | null) {
   const jobItem = data as JobItemExpanded;
   const isLoading = isInitialLoading;
   return { jobItem, isLoading };
+}
+
+// ----------------------- many jobs by array of IDs
+export function useJobItems(ids: number[]) {
+  const results = useQueries({
+    queries: ids.map((id) => ({
+      queryKey: ["job-item", id],
+      queryFn: () => fetchJobItem(id),
+      staleTime: 1000 * 60 * 5,
+      refetchOnWindowFocus: false,
+      retry: false,
+      enabled: Boolean(id),
+      onError: handleError,
+    })),
+  });
+
+  const jobItems = results.map((result) => result?.data as JobItemExpanded);
+  const isLoading = results.some((result) => result.isLoading);
+
+  console.log(jobItems);
+
+  return {
+    jobItems,
+    isLoading,
+  };
 }
 
 export function useDebounce<T>(value: T, delay = 1000): T {
@@ -82,7 +110,6 @@ export function useActiveId() {
   useEffect(() => {
     const handleHashChange = () => {
       const id = +window.location.hash.slice(1);
-      console.log(id);
       setActiveId(id);
     };
 
@@ -132,7 +159,7 @@ export function useLocalStorage<T>(
 //   return { jobItem, isLoading };
 // }
 
-// export function useJobItems(searchText: string) {
+// export function useSearchQuery(searchText: string) {
 //   const [jobItems, setJobItems] = useState<JobItem[]>([]);
 //   const [isLoading, setIsLoading] = useState(false);
 
