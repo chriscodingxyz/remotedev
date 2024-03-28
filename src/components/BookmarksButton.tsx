@@ -22,8 +22,9 @@ export default function BookmarksButton() {
   // }, []);
 
   useEffect(() => {
-    const handleClick = (e) => {
+    const handleClick = (e: MouseEvent) => {
       if (
+        e.target instanceof HTMLElement &&
         !e.target.closest(".bookmarks-btn") &&
         !e.target.closest(".bookmarks-popover")
       ) {
