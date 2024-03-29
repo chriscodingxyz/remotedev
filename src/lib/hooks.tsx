@@ -4,6 +4,7 @@ import { BASE_API_URL } from "./constants";
 import { useQueries, useQuery } from "@tanstack/react-query";
 import { handleError } from "./utils";
 import { BookmarksContext } from "../contexts/BookmarksContextProvider";
+import { ActiveIdContext } from "../contexts/ActiveIdContextProvider";
 
 // -- API Calls --
 const fetchJobItems = async (searchText: string): Promise<JobItem[]> => {
@@ -210,6 +211,14 @@ export function useBookMarksContext() {
   const context = useContext(BookmarksContext);
   if (!context) {
     throw new Error("BookmarksContext not found");
+  }
+  return context;
+}
+
+export function useActiveIdContext() {
+  const context = useContext(ActiveIdContext);
+  if (!context) {
+    throw new Error("ActiveIdContext not found");
   }
   return context;
 }
