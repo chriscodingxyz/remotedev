@@ -1,4 +1,3 @@
-import { useState } from "react";
 import Background from "./Background";
 import Container from "./Container";
 import Footer from "./Footer";
@@ -12,47 +11,11 @@ import JobList from "./JobList";
 import PaginationControls from "./PaginationControls";
 import ResultsCount from "./ResultsCount";
 import SortingControls from "./SortingControls";
-import { useDebounce, useSearchQuery } from "../lib/hooks";
+
 import { Toaster } from "sonner";
-import { RESULTS_PER_PAGE } from "../lib/constants";
-import { PageDirection, SortBy } from "../lib/types";
+import JobListSearch from "./JobListSearch";
 
 function App() {
-  const [searchText, setSearchText] = useState("");
-  const debouncedSearchText = useDebounce(searchText, 300);
-  const { jobItems, isLoading } = useSearchQuery(debouncedSearchText);
-  const [currentPage, setCurrentPage] = useState(1);
-  const [sortBy, setSortBy] = useState<SortBy>("relevant");
-
-  function handleChangeSortBy(newSortBy: SortBy) {
-    setCurrentPage(1);
-    setSortBy(newSortBy);
-  }
-
-  const totalNumberOfResults = jobItems?.length || 0;
-
-  const jobItemsSorted = [...(jobItems || [])].sort((a, b) => {
-    if (sortBy === "relevant") {
-      return b.relevanceScore - a.relevanceScore;
-    } else sortBy === "recent";
-    return a.daysAgo - b.daysAgo;
-  });
-
-  const jobItemsSortedAndSliced = jobItemsSorted.slice(
-    RESULTS_PER_PAGE * currentPage - RESULTS_PER_PAGE,
-    currentPage * RESULTS_PER_PAGE
-  );
-
-  const pagesTotal = Math.ceil(totalNumberOfResults / RESULTS_PER_PAGE);
-
-  function handleChangePage(direction: PageDirection) {
-    if (direction === "next") {
-      setCurrentPage((prev) => prev + 1);
-    } else {
-      setCurrentPage((prev) => prev - 1);
-    }
-  }
-
   return (
     <>
       <Toaster richColors />
@@ -62,23 +25,24 @@ function App() {
           <Logo />
           <BookmarksButton />
         </HeaderTop>
-        <SearchForm searchText={searchText} setSearchText={setSearchText} />
+        <SearchForm />
       </Header>
       <Container>
-        {searchText ? (
-          <Sidebar>
-            <SidebarTop>
-              <ResultsCount totalNumberOfResults={totalNumberOfResults} />
-              <SortingControls sortBy={sortBy} onClick={handleChangeSortBy} />
-            </SidebarTop>
-            <JobList jobItems={jobItemsSortedAndSliced} isLoading={isLoading} />
-            <PaginationControls
-              currentPage={currentPage}
-              onClick={handleChangePage}
-              pagesTotal={pagesTotal}
-            />
-          </Sidebar>
-        ) : null}
+        {/* {searchText ? ( */}
+        <Sidebar>
+          <SidebarTop>
+            <ResultsCount />
+            <SortingControls />
+          </SidebarTop>
+          {
+            //made a seperate component for JobListSearch and I added the context within there, so it doesnt remain in the App.jsx which
+            // would cause much more re-renders, which we wanted to avoid from the start with Context
+          }
+          <JobListSearch />
+
+          <PaginationControls />
+        </Sidebar>
+        {/* ) : null} */}
         <JobItemContent />
       </Container>
       <Footer />
