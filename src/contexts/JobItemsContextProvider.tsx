@@ -64,20 +64,33 @@ export default function JobItemsContextProvider({
     }
   }
 
+  const contextValue = useMemo(
+    () => ({
+      jobItems,
+      jobItemsSortedAndSliced,
+      isLoading,
+      totalNumberOfResults,
+      pagesTotal,
+      currentPage,
+      sortBy,
+      handleChangeSortBy,
+      handleChangePage,
+    }),
+    [
+      jobItems,
+      jobItemsSortedAndSliced,
+      isLoading,
+      totalNumberOfResults,
+      pagesTotal,
+      currentPage,
+      sortBy,
+      handleChangeSortBy,
+      handleChangePage,
+    ]
+  );
+
   return (
-    <JobItemsContext.Provider
-      value={{
-        jobItems,
-        jobItemsSortedAndSliced,
-        isLoading,
-        totalNumberOfResults,
-        pagesTotal,
-        currentPage,
-        sortBy,
-        handleChangeSortBy,
-        handleChangePage,
-      }}
-    >
+    <JobItemsContext.Provider value={contextValue}>
       {children}
     </JobItemsContext.Provider>
   );
