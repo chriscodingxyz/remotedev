@@ -7,7 +7,6 @@ export default function Footer() {
           <a href="https://chriscoding.xyz" target="_blank">
             ChrisCoding.xyz
           </a>
-          . Intended for learning or your portfolio.
         </p>
       </small>
 
