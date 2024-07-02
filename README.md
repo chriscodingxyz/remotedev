@@ -1,27 +1,90 @@
-# React + TypeScript + Vite
+# RemoteDev
 
-This template provides a minimal setup to get React working in Vite with HMR and some ESLint rules.
+**RemoteDev** is a platform designed to help developers find remote job opportunities. Built with React, TypeScript, and Vite, this project aims to streamline the job search process for remote developer positions.
 
-Currently, two official plugins are available:
+## Live Demo
 
-- [@vitejs/plugin-react](https://github.com/vitejs/vite-plugin-react/blob/main/packages/plugin-react/README.md) uses [Babel](https://babeljs.io/) for Fast Refresh
-- [@vitejs/plugin-react-swc](https://github.com/vitejs/vite-plugin-react-swc) uses [SWC](https://swc.rs/) for Fast Refresh
+Check out the live demo of the application [here](https://remotedev.vercel.app).
 
-## Expanding the ESLint configuration
+## Features
 
-If you are developing a production application, we recommend updating the configuration to enable type aware lint rules:
+- **Job Listings**: Browse remote developer jobs.
+- **Search Functionality**: Search for jobs based on keywords and filters.
+- **Detailed Job Descriptions**: View detailed descriptions of job postings.
 
-- Configure the top-level `parserOptions` property like this:
+## Installation
 
-```js
-   parserOptions: {
-    ecmaVersion: 'latest',
-    sourceType: 'module',
-    project: ['./tsconfig.json', './tsconfig.node.json'],
-    tsconfigRootDir: __dirname,
-   },
-```
+To get a local copy up and running, follow these steps:
 
-- Replace `plugin:@typescript-eslint/recommended` to `plugin:@typescript-eslint/recommended-type-checked` or `plugin:@typescript-eslint/strict-type-checked`
-- Optionally add `plugin:@typescript-eslint/stylistic-type-checked`
-- Install [eslint-plugin-react](https://github.com/jsx-eslint/eslint-plugin-react) and add `plugin:react/recommended` & `plugin:react/jsx-runtime` to the `extends` list
+### Prerequisites
+
+- Node.js
+- npm (or yarn)
+
+### Installation Steps
+
+1. Clone the repository:
+   ```sh
+   git clone https://github.com/chriscodingxyz/remotedev.git
+   ```
+2. Navigate to the project directory:
+   ```sh
+   cd remotedev
+   ```
+3. Install dependencies:
+   ```sh
+   npm install
+   ```
+4. Start the development server:
+   ```sh
+   npm run dev
+   ```
+
+## Usage
+
+Once the development server is running, you can access the application at `http://localhost:3000`.
+
+## Folder Structure
+
+- **public**: Static assets
+- **src**: Source code
+  - **components**: React components
+  - **pages**: Application pages
+  - **styles**: CSS styles
+  - **utils**: Utility functions
+
+## Technologies Used
+
+- **React**
+- **TypeScript**
+- **Vite**
+- **CSS**
+
+## Contributing
+
+Contributions are welcome! Please follow these steps:
+
+1. Fork the repository.
+2. Create your feature branch:
+   ```sh
+   git checkout -b feature/YourFeature
+   ```
+3. Commit your changes:
+   ```sh
+   git commit -m 'Add some feature'
+   ```
+4. Push to the branch:
+   ```sh
+   git push origin feature/YourFeature
+   ```
+5. Open a pull request.
+
+## License
+
+Distributed under the MIT License. See `LICENSE` for more information.
+
+## Contact
+
+Chris Coding - [chriscodingxyz](https://github.com/chriscodingxyz) - chriscoding@icloud.com
+
+Project Link: [https://github.com/chriscodingxyz/remotedev](https://github.com/chriscodingxyz/remotedev)
